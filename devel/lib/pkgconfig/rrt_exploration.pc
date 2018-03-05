@@ -1,8 +1,0 @@
-prefix=/home/projet-d/Multibot-WS/devel
-
-Name: rrt_exploration
-Description: Description of rrt_exploration
-Version: 1.0.0
-Cflags: -I/home/projet-d/Multibot-WS/devel/include
-Libs: -L/home/projet-d/Multibot-WS/devel/lib 
-Requires: message_runtime
