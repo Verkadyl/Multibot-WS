@@ -1,0 +1,18 @@
+<launch>
+<!--Il faut ce petit bout de texte pour que le fichier soit considéré comme un fichier launch.-->
+	<group ns="turtlesim1">
+		<node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+	</group>
+	<group ns="turtlesim2">
+		<node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+	</group>
+<!--On ouvre deux turtlesim différentes.-->
+
+	<node pkg="turtlesim" name="mimic" type="mimic">
+		<remap from="input" to="turtlesim1/turtle1"/>
+		<remap from="output" to="turtlesim2/turtle1"/>
+	</node>
+<!--Mimic prend la sortie de turtlesim1, et le transfère à turtlesim2.-->
+<!--D'où leurs mouvements si similaires.-->
+
+</launch>

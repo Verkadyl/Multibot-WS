@@ -1,0 +1,3 @@
+#!/bin/bash
+source ~/paul_ws/devel/setup.bash
+roslaunch rrt_exploration_tutorials mutliple_simulated_house.launch

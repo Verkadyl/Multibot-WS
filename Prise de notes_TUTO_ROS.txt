@@ -1,0 +1,182 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+							rosservice
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Entendons-nous sur le mot "service", il est à prendre au sens de fonction.
+
+rosservice list         print information about active services
+rosservice call         call the service with the provided args
+rosservice type         print service type
+rosservice find         find services by service type
+rosservice uri          print service ROSRPC uri
+
+<--Pour obtenir des infos sur un service :-->
+rosservice type [nom du service] | rossrv show
+
+<--Pour appeler un service :-->
+rosservice call [nom du service] [paramètre associés à ce service]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+							rosparam
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Permet de manipuler des variables comme des entiers, des booléens, des flottants, des dictionnaire et des tableaux associés.
+
+rosparam set            set parameter
+rosparam get            get parameter
+rosparam load           load parameters from file
+rosparam dump           dump parameters to file
+rosparam delete         delete parameter
+rosparam list           list parameter names
+
+<--Pour obtenir la valeur d'une variable-->
+rosparam get [nom du paramètre]
+
+<--Pour obtenir les valeurs de tous les paramètres-->
+rosparam get /
+
+<--Pour changer la valeur d'un paramètre-->
+rosparam set [nom du paramètre à changer] [nouvelle valeur]
+
+<--Pour enregistrer des variables dans un fichier-->
+rosparam dump [nom du fichier avec son extension] [namespace]
+
+<--Pour charger un fichier, la procédure est assez similaire-->
+rosparam load [nom du fichier avec son extension] [namespace]
+
+<--Pour avoir accès à ces données copiées-->
+rosparam get /[chemin/Du/Dossier]/[nom du paramètre]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+						rqtconsole & roslaunch
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+rqt_console et rqt_logger_level donnent des infos sur les nodes et d'autres choses sympa.
+
+<--Pour les ouvrir, c'est comme ça-->
+rosrun rqt_console rqt_console
+rosrun rqt_logger_level rqt_logger_level
+
+Y'a différents niveaux de messages logs, ceux-là sont répertoriés dans les consoles.
+De son côté, roslaunch permet de lancer plein de nodes en une seule commande.
+
+<--Pour utiliser un un launcher-->
+roslaunch [package] [nomDuFichier.launch]
+
+####RAPPEL####
+Pour ouvrir rqt_graph, il n'y a qu'à noter "rqt_graph".
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+						rosed = ROS + editor
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<--Pour aller éditer directement un fichier à partir de son nom, et nom de son path.-->
+rosed [package_name] [filename]
+
+#Par défaut, cette commande appelle l'éditeur de texte vim. Mais cette option est changeable avec :
+export EDITOR='nano -w'
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+								ROS msg & srv
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-Les msg sont des fichiers texte qui servent à générer du code source pour différents langages. Ils contiennent les variables qui seront utilisés dans la suite des évènements. Un fichier à déclaration de variables en quelque sorte. Quelques types supportés : int64, string, time, float32, float64, Header...
+-Les srv correspondent à un service. Ils sont séparés en deux parties : une requête et une réponse. Ils ressemblent fortement aux fichiers msg, ils contiennent seuleument un séparateur constitué de "---".
+
+Pour pourvoir s'assurer que les fichiers seront bels et bien convertis en fichier python ou C++ ou autre, les fichiers package.xml et CMakeLists.txt doivent être correctement paramétrés. C'est long.
+
+<--Pour copier les fichiers d'un package vers un autre-->
+roscp [package_name] [file_to_copy_path] [copy_path]
+
+<--Pour avoir des détails sur un srv ou un msg-->
+rossrv show [nomDuSRV]
+rosmsg show [nomDuMSG]
+
+#Rappel /!\ Pour reconstruire un package après l'avoir modifié / complété /!\
+#Dans le catkin_ws, faire un "catkin_make install". Chose bizarre d'ailleurs, j'ai dû changer le exec_depends par un run_depend.
+#Une fois ça fait, les fichiers headers en C++ et les fichiers pythons sont normalement créés.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+						Publisher & Subscriber
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<--Pour lancer un node, on fait-->
+rosrun [nomDuPackage] [nomDuNode]
+
+Des nodes de publisher et subscriber ont quelques spécificités en C++ :
+
+***Publisher
+	Des <#include>(s) tels que <"ros/ros.h"> ou <"std_msgs/String.h"> ou tous ceux dont on a besoin.
+
+	Une simple description de ce que fait le programme en commentaires (entre /**   */).
+
+	Le fameux <int main(int argc, char **argv)>
+
+	Vient ensuite <ros::init(argc, argv, "talker");> où l'on passe à ROS les arguments données lors de l'appel de la fonction.
+	Le troisième argument est le nom que l'on donne à notre node. Attention aux caractères spéciaux.
+	Pour le coup, on peut appeler cette étape l'initialisation du node.
+
+	On créé le point de communication de ce node avec le reste du monde avec <ros::NodeHandle n;>
+	Dans ce cas, il s'appelle <n>. La dernière fois qu'il sera appelé dans le programme, il libèrera l'espace mémoire emprunté.
+	
+	Plus loin, on trouve normalement la ligne <ros::Publisher [nomDuPublisher] = n.advertise<[typeDuMessage]>("[nomDuTopic]", [tailleDuBuffer]);>
+	Dans celle-ci, y'a la fonction advertise ; elle avertit le ROS master et tous les nodes qui sont abonnés au topic sur lequel on va diffuser notre message.
+	On indique d'ailleurs le type particulier de ce message (comme <std_msgs::String> par exemple).
+	Dans cette même ligne, on précise d'autres choses telles que le nom du topic chez lequel on va envoyer le message, la taille du buffer.
+	Notons que si la valeur est dépassée, les anciens messages sont perdus.
+	La ligne entière forme un message-objet de type ros::Publisher
+
+	Ensuite vient le moment de péciser la fréquence de publication de messages au topic. Ça se fait avec <ros::Rate loop_rate([fréquenceD'envoi]);>
+	Notons que la fréquence d'envoi est en Hz.
+
+	Le corps réel du programme arrive peu après. Il s'agit de toutes les instructions placées à l'intérieur du <while (ros::ok()){---ICI---}>
+	Où <ros::ok> est le booléen qui se change à faux quand on demande à arrêter le programme avec Ctrl+, quand la méthode <ros::shutdown> est appelée ou autre.
+	On peut demander au programme de créer des variables, effectuer des traitement particuliers, blablabla.
+
+	
+-------------------------------------------
+  
+
+
+  while (ros::ok())
+  {
+    /**
+     * This is a message object. You stuff it with data, and then publish it.
+     */
+    std_msgs::String msg;
+
+    std::stringstream ss;
+    ss << "hello world " << count;
+    msg.data = ss.str();
+
+    ROS_INFO("%s", msg.data.c_str());
+
+    /**
+     * The publish() function is how you send messages. The parameter
+     * is the message object. The type of this object must agree with the type
+     * given as a template parameter to the advertise<>() call, as was done
+     * in the constructor above.
+     */
+    chatter_pub.publish(msg);
+
+    ros::spinOnce();
+
+    loop_rate.sleep();
+    ++count;
+  }
+
+
+  return 0;
+}
+
+-------------------------------------------	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				Recording and playing back data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dans le sens "enregistrer les published topics des programmes qui tournent en ce moment".
+Faut appuyer sur le bouton "enregistrer" avant d'effectuer les publishs. On l'arrête avec un Ctrl+C.
+
+<--Enregistrer les published topics dans un fichier .bag-->
+rosbag record -[insérez une option ici, comme <-a> ou <-h> par exemple] --optionnel {nomDuTopic] --
+#Notons qu'il faut d'abord se placer à l'endroit où l'on souhaite enregistrer le fichier.
+
+<--Pour rejouer les données-->
+rosbag play [nom du fichier .bag]
+
+
