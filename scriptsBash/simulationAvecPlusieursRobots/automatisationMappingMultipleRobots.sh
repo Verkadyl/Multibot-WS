@@ -1,8 +1,8 @@
 #!/bin/bash
 #On commence par sourcer.
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On navigue jusqu'au dossier contenant les scropts. Plusieurs vont être lancés à partir d'ici.
-cd ~/paul_ws/scriptsBash/simulationAvecPlusieursRobots
+cd ~/Multibot-WS/scriptsBash/simulationAvecPlusieursRobots
 
 #Là, on ouvre un terminal qui va être chargé de Gazebo / Rviz
 x-terminal-emulator -H -T "Gazebo_&_Rviz_pour_trois_robots" -e ./ouvrirGazeboRviz-plusieurs-Robots.sh

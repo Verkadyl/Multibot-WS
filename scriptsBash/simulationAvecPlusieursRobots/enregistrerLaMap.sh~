@@ -1,7 +1,7 @@
 #!/bin/bash
 #Ce script permet d'enregistrer la map créée par la flotte de drones.
 
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On vérifie si le dossier "map" existe.
 if [ -d "~/paul_ws/scriptsBash/simulationAvecPlusieursRobots/map" ];then
 echo "Le répertoire \"map\" existe.";
@@ -20,5 +20,3 @@ date=$(date +%Y"_"%m"_"%d"_"%H"_"%M)
 echo "Saving the map..."
 rosrun map_server map_saver map:=/map_merge/map -f $date
 echo "Map saved !"
-#Puis, on ferme tous les nodes en cours.
-#rosnode kill -a

@@ -1,9 +1,9 @@
 #!/bin/bash
 #Ce script permet de mettre fin à la simulation de cartographie.
 #On commence par sourcer.
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On se dirige vers le dossier de script contenant le nécessaire à la simulation d'un seul robot.
-cd ~/paul_ws/scriptsBash/simulationAvecUnRobot
+cd ~/Multibot-WS/scriptsBash/simulationAvecUnRobot
 #On lance dans un terminal le script chargé d'enregistrer la map créée par la méthode de SLAM.
 #Le script exécuté est : <enregistrerLaMap.sh>
 x-terminal-emulator -H -T "Saving_the_map" -e ./enregistrerLaMap.sh

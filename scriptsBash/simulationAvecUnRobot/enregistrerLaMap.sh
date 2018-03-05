@@ -1,9 +1,9 @@
 #!/bin/bash
 #Ce script permet d'enregistrer les maps des zones cartographiés par un robot.
 
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On vérifie si le dossier "map" existe.
-if [ -d "~/paul_ws/scriptsBash/simulationAvecUnRobot/map" ];then
+if [ -d "~/Multibot-WS/scriptsBash/simulationAvecUnRobot/map" ];then
 echo "Le répertoire \"map\" existe.";
 #Si c'est le cas, on y va.
 cd map

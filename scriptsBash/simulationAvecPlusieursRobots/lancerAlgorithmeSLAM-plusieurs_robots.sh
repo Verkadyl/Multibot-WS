@@ -3,6 +3,6 @@
 #Il permet de démarrer l'algorithme de SLAM pour plusieurs robots présent dans la simulation.
 
 #On commence par sourcer.
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On lance l'algorithme de SLAM pour un seul robot.
 roslaunch rrt_exploration three_robots.launch

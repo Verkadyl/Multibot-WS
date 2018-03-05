@@ -1,8 +1,8 @@
 #!/bin/bash
 #On commence par sourcer.
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On navigue jusqu'au dossier contenant les scripts. Plusieurs vont être lancés à partir d'ici.
-cd ~/paul_ws/scriptsBash/simulationAvecUnRobot
+cd ~/Multibot-WS/scriptsBash/simulationAvecUnRobot
 
 #Là, on ouvre un terminal qui va être chargé de gérer Gazebo / Rviz. Il lance le script <ouvrirGazeboRviz-unSeulRobot.sh>
 x-terminal-emulator -H -T "Gazebo_&_Rviz_pour_un_robot" -e ./ouvrirGazeboRviz-unSeulRobot.sh

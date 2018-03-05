@@ -1,9 +1,9 @@
 #!/bin/bash
 #Ce script permet d'enregistrer la map créée par la flotte de drones.
 
-source ~/paul_ws/devel/setup.bash
+source ~/Multibot-WS/devel/setup.bash
 #On vérifie si le dossier "map" existe.
-if [ -d "~/paul_ws/scriptsBash/simulationAvecPlusieursRobots/map" ];then
+if [ -d "~/Multibot-WS/scriptsBash/simulationAvecPlusieursRobots/map" ];then
 echo "Le répertoire \"map\" existe.";
 #Si c'est le cas, on y va.
 cd map

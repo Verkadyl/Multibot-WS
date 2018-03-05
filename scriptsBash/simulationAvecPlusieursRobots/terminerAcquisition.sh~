@@ -9,6 +9,7 @@ cd ~/paul_ws/scriptsBash/simulationAvecPlusieursRobots
 x-terminal-emulator -H -T "Saving_the_map" -e ./enregistrerLaMap.sh
 #Le <sleep> est là pour laisser le temps à la map de s'enregistrer.
 sleep 4
-#Et ce n'est qu'après qu'on ferme les différents noeuds
+#Et ce n'est qu'après qu'on ferme les différents noeuds.
+#C'est le script <closeProcess.sh> que l'on appelle qui fermera tous les process en cours.
 x-terminal-emulator -H -T "Closing_process" -e ./closeProcess.sh
 

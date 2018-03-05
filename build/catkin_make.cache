@@ -1,0 +1,2 @@
+beginner_tutorial:m-explore/explore:m-explore/map_merge:rrt_exploration:rrt_exploration_tutorials:slam_gmapping/gmapping:slam_gmapping/slam_gmapping
+-DCATKIN_DEVEL_PREFIX=/home/projet-d/Multibot-WS/devel -DCMAKE_INSTALL_PREFIX=/home/projet-d/Multibot-WS/install -G Unix Makefiles
