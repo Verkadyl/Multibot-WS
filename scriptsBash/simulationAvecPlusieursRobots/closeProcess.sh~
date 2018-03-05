@@ -1,6 +1,0 @@
-#!/bin/bash
-#Attention, première méthode ! Pas à 100% sûr qu'elle fonctionne par contre...
-rosnode kill -a
-#Brutal, certes, mais simple à comprendre.
-#Ensuite, on ferme Gazebo.
-pkill -term Gazebo
